@@ -23,10 +23,10 @@ class BattleField {
       List.filled(battleZone.width, null)
     );
     if (hitMap.any((row) => row.length != hitMap.first.length))
-      throw Exception("Hits map should be rectangle");
+      throw ArgumentError("Hits map should be rectangle");
     if (hitMap.length != battleZone.length
         && hitMap.first.length != battleZone.width)
-      throw Exception("Hits map should have same dimentions as battle zone");
+      throw ArgumentError("Hits map should have same dimentions as battle zone");
 
     final ships = existingShips ?? ListQueue();
     return BattleField._(battleZone, ships, hitMap);
@@ -42,9 +42,9 @@ class BattleField {
 
   Ship? makeMove(Coordinates c) {
     if (!zone.contains(c))
-      throw Exception("Cannot target outside the battlefield");
+      throw ArgumentError("Cannot target outside the battlefield");
     if (_hitMap[c.x][c.y] != null)
-      throw Exception("Cannot target same coordinates twice");
+      throw ArgumentError("Cannot target same coordinates twice");
 
     final target = checkHit(c);
     _hitMap[c.x][c.y] = target != null;

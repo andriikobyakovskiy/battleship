@@ -10,11 +10,11 @@ class Ship {
 
   factory Ship.build(Coordinates start, Coordinates end) {
     if(start.x != end.x && start.y != end.y)
-       throw Exception("Ship should be placed horizontally or vertically");
+       throw ArgumentError("Ship should be placed horizontally or vertically");
 
     return Ship._(Zone(
-      (start.x - end.x).abs(),
-      (start.y - end.y).abs(),
+      (start.x - end.x).abs() + 1,
+      (start.y - end.y).abs() + 1,
       min(start.x, end.x),
       min(start.y, end.y),
     ));

@@ -55,8 +55,8 @@ class BattleController {
           ? battleFields.keys.firstWhere((p) => p != _currentPlayer)
           : _currentPlayer
       );
-    } on Exception catch (e) {
-      return Error(e.toString());
+    } on ArgumentError catch (e) {
+      return Error(e.message);
     }
   }
 }

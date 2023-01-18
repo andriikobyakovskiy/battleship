@@ -6,19 +6,34 @@ class Zone {
   final int lengthOffset;
   final int widthOffset;
 
-  Zone(this.length, this.width, this.lengthOffset, this.widthOffset);
+  const Zone(this.length, this.width, [this.lengthOffset=0, this.widthOffset=0]);
 
   bool contains(Coordinates coordinates) {
-    if (coordinates.x < lengthOffset || coordinates.x > lengthOffset + length)
+    if (coordinates.x < lengthOffset || coordinates.x >= lengthOffset + length)
       return false;
-    if (coordinates.y < widthOffset || coordinates.y > widthOffset + width)
+    if (coordinates.y < widthOffset || coordinates.y >= widthOffset + width)
       return false;
 
     return true;
   }
 
-  Iterable<Coordinates> get coordinates => List.generate(
+  List<Coordinates> get coordinates => List.generate(
     length * width,
-    (i) => Coordinates(lengthOffset + i % length, widthOffset + i ~/ length)
+    (i) => Coordinates(lengthOffset + i ~/ width, widthOffset + i % width)
+  );
+
+  @override
+  int get hashCode => length << 24
+      + (width & 0xff) << 16
+      + (lengthOffset & 0xff) << 8
+      + (widthOffset & 0xff);
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || (
+    other is Zone
+    && (other.length == this.length
+        && other.width == this.width
+        && other.lengthOffset == this.lengthOffset
+        && other.widthOffset == this.widthOffset)
   );
 }

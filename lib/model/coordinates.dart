@@ -10,7 +10,7 @@ class Coordinates {
   );
 
   @override
-  int get hashCode => (x << 8) + (y & 0xff);
+  int get hashCode => (x << 16) + (y & 0xffff);
 
   @override
   bool operator ==(Object other) => identical(this, other) || (
