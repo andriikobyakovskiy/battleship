@@ -1,7 +1,10 @@
+import 'package:battleship/controller/battle_controller.dart';
 import 'package:battleship/model/battlefield.dart';
 import 'package:battleship/model/coordinates.dart';
+import 'package:battleship/model/ship.dart';
 import 'package:battleship/model/zone.dart';
-import 'package:battleship/view/battlefield_grid_view.dart';
+import 'package:battleship/view/battle_view.dart';
+import 'package:battleship/view/battlefield_grid_wrapper.dart';
 import 'package:battleship/view/battlefield_view.dart';
 import 'package:flutter/material.dart';
 
@@ -36,15 +39,37 @@ class _MenuPageState extends State<MenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    final b = BattleField.build(
+    final b1 = BattleField.build(
       Zone(10, 10, 'A'.runes.first, 1),
+      existingShips: [
+        Ship.build(
+          Coordinates.letterDigit('E', 6),
+          Coordinates.letterDigit('G', 6),
+        ),
+      ]
     );
-    b.makeMove(Coordinates('A'.runes.first, 2));
+    final b2 = BattleField.build(
+      Zone(10, 10, 'A'.runes.first, 1),
+      existingShips: [
+        Ship.build(
+          Coordinates.letterDigit('E', 2),
+          Coordinates.letterDigit('G', 2),
+        ),
+      ]
+    );
+    final controller = BattleController.initiate({"Player1": b1, "Player2": b2});
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: BattleFieldGridView(battleField: b, showShips: false),
+      body: BattleFieldGridWrapper(
+        battleField: controller.otherPlayerBattleField,
+        side: 500,
+        battleFieldWidget: BattleView(
+          battleController: controller,
+          side: 500,
+        ),
+      ),
     );
   }
 }

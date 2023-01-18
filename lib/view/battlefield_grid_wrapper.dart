@@ -1,34 +1,29 @@
-import 'package:battleship/view/battlefield_view.dart';
 import 'package:flutter/material.dart';
 import 'package:battleship/model/battlefield.dart';
 
-class BattleFieldGridView extends StatelessWidget {
+class BattleFieldGridWrapper extends StatelessWidget {
   final BattleField battleField;
-  final bool showShips;
+  final Widget battleFieldWidget;
   final double side;
 
-  const BattleFieldGridView({
+  const BattleFieldGridWrapper({
     super.key,
     required this.battleField,
-    required this.showShips,
-    this.side = 500,
+    required this.battleFieldWidget,
+    required this.side,
   });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: side,
-      height: side,
+      width: side * 1.1,
+      height: side * 1.1,
       child: Stack(
         fit: StackFit.expand,
         children: [
           Align(
             alignment: Alignment.bottomRight,
-            child: BattleFieldView(
-              battleField: battleField,
-              showShips: showShips,
-              side: side * 0.9,
-            ),
+            child: battleFieldWidget,
           ),
 
           // vertical axis
@@ -36,7 +31,7 @@ class BattleFieldGridView extends StatelessWidget {
             alignment: Alignment.bottomLeft,
             child: SizedBox(
               width: side * 0.1,
-              height: side * 0.9,
+              height: side,
               child: Stack(
                 fit: StackFit.expand,
                 children: List.generate(
@@ -62,7 +57,7 @@ class BattleFieldGridView extends StatelessWidget {
             alignment: Alignment.topRight,
             child: SizedBox(
               height: side * 0.1,
-              width: side * 0.9,
+              width: side,
               child: Stack(
                 fit: StackFit.expand,
                 children: List.generate(

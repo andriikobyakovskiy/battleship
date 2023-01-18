@@ -2,8 +2,8 @@ import 'package:battleship/model/coordinates.dart';
 import 'package:battleship/model/ship.dart';
 import 'package:battleship/model/zone.dart';
 import 'package:battleship/model/battlefield.dart';
-import 'package:battleship/model/battle_log.dart';
-import 'package:battleship/model/battle_controller.dart';
+import 'package:battleship/controller/battle_log.dart';
+import 'package:battleship/controller/battle_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

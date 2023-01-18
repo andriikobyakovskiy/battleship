@@ -1,4 +1,4 @@
-import 'package:battleship/model/battle_log.dart';
+import 'package:battleship/controller/battle_log.dart';
 import 'package:battleship/model/battlefield.dart';
 import 'package:battleship/model/coordinates.dart';
 
@@ -44,7 +44,7 @@ class BattleController {
 
   TurnResult makeTurn(Coordinates target) {
     try {
-      final result = battleFields[_currentPlayer]!.makeMove(target);
+      final result = otherPlayerBattleField.makeMove(target);
       log.logTurn(_currentPlayer, target, result);
       final winner = log.winner;
       if (winner != null)
@@ -59,4 +59,8 @@ class BattleController {
       return Error(e.message);
     }
   }
+
+  BattleField get currentPlayerBattleField => battleFields[_currentPlayer]!;
+  BattleField get otherPlayerBattleField =>
+      battleFields.entries.firstWhere((e) => e.key != _currentPlayer).value;
 }

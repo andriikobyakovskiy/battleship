@@ -1,4 +1,5 @@
 import 'package:battleship/model/battlefield.dart';
+import 'package:battleship/view/ship_view.dart';
 import 'package:flutter/material.dart';
 
 class BattleFieldView extends StatelessWidget {
@@ -12,7 +13,7 @@ class BattleFieldView extends StatelessWidget {
     required this.battleField,
     required this.showShips,
     this.side = 500,
-    this.padding = 5,
+    this.padding = 10,
   });
 
   @override
@@ -24,7 +25,15 @@ class BattleFieldView extends StatelessWidget {
       height: side,
       child: Stack(
         fit: StackFit.expand,
-        children: List.generate(
+        children: (
+          showShips
+            ? battleField.ships.map<Widget>((s) => ShipView(
+                ship: s,
+                battleZone: battleField.zone,
+                cellSide: cellSide
+              )).toList()
+            : <Widget>[]
+        ) + List.generate(
           battleField.zone.length * battleField.zone.width,
           (i) {
             final cellHit = hitMap[i % battleField.zone.length][i ~/ battleField.zone.length];
@@ -34,14 +43,13 @@ class BattleFieldView extends StatelessWidget {
                 2 * (i % battleField.zone.length) / (battleField.zone.width - 1) - 1
               ),
               child: Container(
-              constraints: BoxConstraints(
-                maxHeight: cellSide - padding,
-                maxWidth: cellSide - padding
-              ),
-
-              color: cellHit == null
-                ? Colors.grey
-                : (cellHit ? Colors.lightBlueAccent : Colors.redAccent),
+                constraints: BoxConstraints(
+                  maxHeight: cellSide - padding,
+                  maxWidth: cellSide - padding
+                ),
+                color: cellHit == null
+                  ? Colors.grey
+                  : (cellHit ? Colors.redAccent : Colors.lightBlueAccent),
               )
             );
           }),
