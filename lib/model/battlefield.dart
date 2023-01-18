@@ -15,9 +15,9 @@ class BattleField {
     {List<List<bool?>>? existingHitMap,
      List<Ship>? existingShips}
   ) {
-    final hitMap = existingHitMap ?? List.filled(
+    final hitMap = existingHitMap ?? List.generate(
       zone.length,
-      List.filled(zone.width, null)
+      (_) => List.filled(zone.width, null)
     );
     if (hitMap.any((row) => row.length != hitMap.first.length)) {
       throw ArgumentError("Hits map should be rectangle");
