@@ -9,10 +9,12 @@ class Zone {
   const Zone(this.length, this.width, [this.lengthOffset=0, this.widthOffset=0]);
 
   bool contains(Coordinates coordinates) {
-    if (coordinates.x < lengthOffset || coordinates.x >= lengthOffset + length)
+    if (coordinates.x < lengthOffset || coordinates.x >= lengthOffset + length) {
       return false;
-    if (coordinates.y < widthOffset || coordinates.y >= widthOffset + width)
+    }
+    if (coordinates.y < widthOffset || coordinates.y >= widthOffset + width) {
       return false;
+    }
 
     return true;
   }
@@ -31,9 +33,9 @@ class Zone {
   @override
   bool operator ==(Object other) => identical(this, other) || (
     other is Zone
-    && (other.length == this.length
-        && other.width == this.width
-        && other.lengthOffset == this.lengthOffset
-        && other.widthOffset == this.widthOffset)
+    && (other.length == length
+        && other.width == width
+        && other.lengthOffset == lengthOffset
+        && other.widthOffset == widthOffset)
   );
 }

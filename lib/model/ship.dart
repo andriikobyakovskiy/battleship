@@ -9,8 +9,9 @@ class Ship {
   const Ship._(this.hitZone);
 
   factory Ship.build(Coordinates start, Coordinates end) {
-    if(start.x != end.x && start.y != end.y)
-       throw ArgumentError("Ship should be placed horizontally or vertically");
+    if(start.x != end.x && start.y != end.y) {
+      throw ArgumentError("Ship should be placed horizontally or vertically");
+    }
 
     return Ship._(Zone(
       (start.x - end.x).abs() + 1,
@@ -37,6 +38,13 @@ class Ship {
   ));
 
   int get size => max(hitZone.length, hitZone.width);
+
+  bool intersects(Ship other) =>
+    hitZone.coordinates.toSet().intersection(
+      // switch between surroundingZone and hitZone here to
+      // allow/reject placing ships one close to another
+      other.surroundingZone.coordinates.toSet()
+    ).isNotEmpty;
 
   @override
   int get hashCode => hitZone.hashCode;

@@ -3,6 +3,8 @@ class Coordinates {
   final int y;
 
   const Coordinates(this.x, this.y);
+  factory Coordinates.letterDigit(String x, int y) =>
+    Coordinates(x.runes.first, y);
 
   Coordinates copyWith({int? x, int? y}) => Coordinates(
     x ?? this.x,

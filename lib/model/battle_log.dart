@@ -26,15 +26,17 @@ class BattleLog {
         (shipEntry) => shipEntry.value.toSet() !=
             shipEntry.key.hitZone.coordinates.toSet()
       );
-      if (!shipsRemain)
+      if (!shipsRemain) {
         return playerEntry.key;
+      }
     }
     return null;
   }
 
   BattleLog logTurn(String player, Coordinates target, Ship? result) {
-    if (result != null)
+    if (result != null) {
       shipHits[player]?[result]?.add(target);
+    }
 
     log.add(Turn(player, target, result));
     return this;
