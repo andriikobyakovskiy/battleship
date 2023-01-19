@@ -4,8 +4,6 @@ import 'package:battleship/model/coordinates.dart';
 import 'package:battleship/model/ship.dart';
 import 'package:battleship/model/zone.dart';
 import 'package:battleship/view/battle_view.dart';
-import 'package:battleship/view/battlefield_grid_wrapper.dart';
-import 'package:battleship/view/battlefield_view.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -62,13 +60,11 @@ class _MenuPageState extends State<MenuPage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: BattleFieldGridWrapper(
-        battleField: controller.otherPlayerBattleField,
-        side: 500,
-        battleFieldWidget: BattleView(
-          battleController: controller,
-          side: 500,
-        ),
+      body: BattleView(
+        battleController: controller,
+        onError: (_) {},
+        onSwitch: (_) {},
+        onWinner: (_) {},
       ),
     );
   }

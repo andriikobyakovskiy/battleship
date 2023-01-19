@@ -16,10 +16,12 @@ class Error extends TurnResult {
   Error(this.error);
 }
 
-class Success extends TurnResult {
+class Hit extends TurnResult {}
+
+class Miss extends TurnResult {
   final String nextPlayer;
 
-  Success(this.nextPlayer);
+  Miss(this.nextPlayer);
 }
 
 class BattleController {
@@ -47,14 +49,20 @@ class BattleController {
       final result = otherPlayerBattleField.makeMove(target);
       log.logTurn(_currentPlayer, target, result);
       final winner = log.winner;
-      if (winner != null)
+      if (winner != null) {
         return Victory(winner);
+      }
 
-      return Success(
-        result == null
-          ? battleFields.keys.firstWhere((p) => p != _currentPlayer)
-          : _currentPlayer
-      );
+      if (result == null) {
+        _currentPlayer = battleFields
+            .keys
+            .firstWhere((p) => p != _currentPlayer);
+        return Miss(_currentPlayer);
+      }
+      else {
+        return Hit();
+      }
+
     } on ArgumentError catch (e) {
       return Error(e.message);
     }

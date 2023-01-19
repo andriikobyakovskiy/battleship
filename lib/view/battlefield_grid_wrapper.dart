@@ -39,7 +39,7 @@ class BattleFieldGridWrapper extends StatelessWidget {
                   (i) => Align(
                     alignment: Alignment(
                       0,
-                      (2 * i + 1) / battleField.zone.length - 1
+                      (2 * i) / (battleField.zone.length - 1) - 1
                     ),
                     child: Text(
                       battleField.zone.lengthOffset < 'A'.runes.first
@@ -64,7 +64,7 @@ class BattleFieldGridWrapper extends StatelessWidget {
                   battleField.zone.width,
                     (i) => Align(
                     alignment: Alignment(
-                      (2 * i + 1) / battleField.zone.width - 1,
+                      (2 * i) / (battleField.zone.width - 1) - 1,
                       0
                     ),
                     child: Text(

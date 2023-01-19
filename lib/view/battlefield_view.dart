@@ -13,8 +13,8 @@ class BattleFieldView extends StatelessWidget {
     required this.battleField,
     required this.showShips,
     this.side = 500,
-    this.padding = 10,
-  });
+    double? padding,
+  }): padding = padding ?? side * 0.01;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class BattleFieldView extends StatelessWidget {
                   maxWidth: cellSide - padding
                 ),
                 color: cellHit == null
-                  ? Colors.grey
+                  ? (showShips ? Colors.black12 : Colors.grey)
                   : (cellHit ? Colors.redAccent : Colors.lightBlueAccent),
               )
             );
