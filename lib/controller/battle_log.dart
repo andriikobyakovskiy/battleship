@@ -12,16 +12,16 @@ class Turn {
 }
 
 class BattleLog {
-  final ListQueue<Turn> log;
-  final Map<String, Map<Ship, Set<Coordinates>>> shipsToHit;
+  final ListQueue<Turn> _log;
+  final Map<String, Map<Ship, Set<Coordinates>>> _shipsToHit;
 
   BattleLog(
-    this.shipsToHit,
+    this._shipsToHit,
     [ListQueue<Turn>? existingLog]
-  ): log = existingLog ?? ListQueue();
+  ): _log = existingLog ?? ListQueue();
 
   String? get winner {
-    for (var playerEntry in shipsToHit.entries) {
+    for (var playerEntry in _shipsToHit.entries) {
       final shipsRemain = playerEntry.value.entries.any(
         (shipEntry) => shipEntry.key.hitZone.coordinates.toSet().difference(
           shipEntry.value.toSet()
@@ -36,10 +36,10 @@ class BattleLog {
 
   BattleLog logTurn(String player, Coordinates target, Ship? result) {
     if (result != null) {
-      shipsToHit[player]?[result]?.add(target);
+      _shipsToHit[player]?[result]?.add(target);
     }
 
-    log.add(Turn(player, target, result));
+    _log.add(Turn(player, target, result));
     return this;
   }
 }

@@ -26,14 +26,14 @@ class Miss extends TurnResult {
 }
 
 class BattleController {
-  final BattleLog log;
-  final Map<String, BattleField> battleFields;
+  final BattleLog _log;
+  final Map<String, BattleField> _battleFields;
   String _currentPlayer;
 
   BattleController._(
-    this.log,
-    this.battleFields,
-  ): _currentPlayer = battleFields.keys.first;
+    this._log,
+    this._battleFields,
+  ): _currentPlayer = _battleFields.keys.first;
 
   factory BattleController.initiate(Map<String, BattleField> battleFields) {
     final log = BattleLog(battleFields.map(
@@ -48,14 +48,14 @@ class BattleController {
   TurnResult makeTurn(Coordinates target) {
     try {
       final result = otherPlayerBattleField.makeMove(target);
-      log.logTurn(_currentPlayer, target, result);
-      final winner = log.winner;
+      _log.logTurn(_currentPlayer, target, result);
+      final winner = _log.winner;
       if (winner != null) {
         return Victory(winner);
       }
 
       if (result == null) {
-        _currentPlayer = otherPlayer(_currentPlayer, battleFields);
+        _currentPlayer = otherPlayer(_currentPlayer, _battleFields);
         return Miss(_currentPlayer);
       }
       else {
@@ -67,10 +67,10 @@ class BattleController {
     }
   }
 
-  BattleField get currentPlayerBattleField => battleFields[_currentPlayer]!;
+  BattleField get currentPlayerBattleField => _battleFields[_currentPlayer]!;
   BattleField get otherPlayerBattleField => otherBattleField(
     _currentPlayer,
-    battleFields
+    _battleFields
   );
 
   String get currentPlayer => _currentPlayer;

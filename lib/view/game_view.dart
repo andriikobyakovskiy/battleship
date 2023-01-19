@@ -32,8 +32,9 @@ class _GameState extends State<GameView> {
   String _player2Name = '';
   String? _winner;
   bool _player1ShipsPlaced = false;
-  Map<int, int> _shipCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 1};
+  Map<int, int> _shipsCounts = {5: 0, 4: 0, 3: 0, 2: 0, 1: 1};
   late Map<String, BattleField> _battleFields;
+  late Map<String, Map<int, int>> _playersShipsCounts;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class _GameState extends State<GameView> {
       case GameStage.enteringNames:
         return _buildEnteringNamesView();
       case GameStage.settingShipsNumber:
-        return _buildShipsNumberView();
+        return _buildShipsCountsView();
       case GameStage.placingShips:
         return _buildShipsPlacingView();
       case GameStage.battle:
@@ -85,58 +86,60 @@ class _GameState extends State<GameView> {
   Widget _buildBattleView() {
     final controller = BattleController.initiate(_battleFields);
     return TwoPlayersActivity(
-      resume: (winner) => setState(() {
+      onActivityEnd: (winner) => setState(() {
         _winner = winner;
         _stage = GameStage.victory;
       }),
       header: "Battle",
       firstPlayer: controller.currentPlayer,
-      widgetBuilder: (resume, onError, onSwitch) => BattleView(
+      widgetBuilder: (onActivityEnd, onError, onPlayerSwitch) => BattleView(
         battleController: controller,
         onError: onError,
-        onSwitch: onSwitch,
+        onPlayerSwitch: onPlayerSwitch,
         onVictory: (w) {
           onError('');
-          resume(w);
+          onActivityEnd(w);
         },
       )
     );
   }
 
   Widget _buildShipsPlacingView() {
-    final controller = ShipPlacingController(_battleFields);
+    final controller = ShipPlacingController(
+      _battleFields,
+      _playersShipsCounts
+    );
     if (_player1ShipsPlaced) {
       controller.switchPlayer();
     }
     return TwoPlayersActivity(
-      resume: (_) => setState(() {
+      onActivityEnd: (_) => setState(() {
         _player1ShipsPlaced = false;
         _stage = GameStage.battle;
       }),
       header: "Select the ship and click on the battlefield to place it. "
             "Click on existing ship to remove it",
       firstPlayer: controller.currentPlayer,
-      widgetBuilder: (resume, onError, onSwitch) => ShipPlacingView(
+      widgetBuilder: (onActivityEnd, onError, onPlayerSwitch) => ShipPlacingView(
         controller: controller,
-        onError: (_) {},
-        onSwitch: _player1ShipsPlaced
-          ? (x) => resume(x)
+        onError: onError,
+        onPlayerSwitch: _player1ShipsPlaced
+          ? (x) => onActivityEnd(x)
           : (player) {
-              onSwitch(player);
+              onPlayerSwitch(player);
               setState(() {
                 _player1ShipsPlaced = true;
               });
             },
-        shipsCount: Map.from(_shipCounts),
         gridSide: BattleView.gridSide,
       ),
     );
   }
 
-  Widget _buildShipsNumberView() {
+  Widget _buildShipsCountsView() {
     return Column(
       children: <Widget>[
-        const Text("Enter ships number:", style: TextStyle(fontSize: 24)),
+        const Text("Enter ships counts:", style: TextStyle(fontSize: 24)),
       ] + List.generate(
         5,
         (i) => Row(
@@ -144,14 +147,14 @@ class _GameState extends State<GameView> {
             Text("Size ${i + 1}:"),
             ElevatedButton(
               onPressed: () => setState(() {
-                _shipCounts[i + 1] = max(0, _shipCounts[i + 1]! - 1);
+                _shipsCounts[i + 1] = max(0, _shipsCounts[i + 1]! - 1);
               }),
               child: const Text('-'),
             ),
-            Text(_shipCounts[i + 1]!.toString()),
+            Text(_shipsCounts[i + 1]!.toString()),
             ElevatedButton(
               onPressed: () => setState(() {
-                _shipCounts[i + 1] = min(3, _shipCounts[i + 1]! + 1);
+                _shipsCounts[i + 1] = min(3, _shipsCounts[i + 1]! + 1);
               }),
               child: const Text('+'),
             ),
@@ -160,6 +163,10 @@ class _GameState extends State<GameView> {
       ) + [
         ElevatedButton(
           onPressed: () => setState(() {
+            _playersShipsCounts = {
+              _player1Name: Map.from(_shipsCounts),
+              _player2Name: Map.from(_shipsCounts),
+            };
             _stage = GameStage.placingShips;
           }),
           child: const Text('Ready', style: TextStyle(fontSize: 24)),

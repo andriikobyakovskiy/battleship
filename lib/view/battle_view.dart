@@ -8,7 +8,7 @@ class BattleView extends StatelessWidget {
   final BattleController battleController;
   final void Function(String) onError;
   final void Function(String) onVictory;
-  final void Function(String) onSwitch;
+  final void Function(String) onPlayerSwitch;
 
   static const gridSide = 200.0;
 
@@ -16,7 +16,7 @@ class BattleView extends StatelessWidget {
     super.key,
     required this.battleController,
     required this.onError,
-    required this.onSwitch,
+    required this.onPlayerSwitch,
     required this.onVictory,
   });
 
@@ -55,7 +55,7 @@ class BattleView extends StatelessWidget {
                   // wipe out existing error and update state
                   onError('');
                 } else if (result is Miss) {
-                  onSwitch(result.nextPlayer);
+                  onPlayerSwitch(result.nextPlayer);
                 }
               },
               zone: battleFieldToListen.zone,

@@ -17,18 +17,16 @@ ShipOrientation otherOrientation (ShipOrientation current) =>
 class ShipPlacingView extends StatefulWidget {
 
   final ShipPlacingController controller;
-  final Map<int, int> shipsCount;
   final double gridSide;
   final Function(String) onError;
-  final Function(String) onSwitch;
+  final Function(String) onPlayerSwitch;
 
   const ShipPlacingView({
     super.key,
     required this.controller,
-    required this.shipsCount,
     required this.gridSide,
     required this.onError,
-    required this.onSwitch,
+    required this.onPlayerSwitch,
   });
 
   @override
@@ -38,12 +36,11 @@ class ShipPlacingView extends StatefulWidget {
 class _ShipPlacingState extends State<ShipPlacingView> {
   late final Map<int, ShipOrientation> _shipsOrientation;
   int? _selectedShip;
-  String _error = '';
 
   @override
   void initState() {
     super.initState();
-    _shipsOrientation = widget.shipsCount.map(
+    _shipsOrientation = widget.controller.currentShipsCount.map(
       (key, value) => MapEntry(key, ShipOrientation.vertical)
     );
   }
@@ -59,17 +56,17 @@ class _ShipPlacingState extends State<ShipPlacingView> {
             onTarget: (target) {
               if (_selectedShip == null) {
                 final result = widget.controller.removeShip(target);
-                setState(() {
-                  if (result is Error) {
-                      _error = result.error;
-                  } else {
+                if (result is Error) {
+                  widget.onError(result.error);
+                } else {
+                  setState(() {
                     final removedShip = (result as Success).ship;
                     if (removedShip != null) {
-                      widget.shipsCount[removedShip.size] =
-                          widget.shipsCount[removedShip.size]! + 1;
+                      widget.controller.currentShipsCount[removedShip.size] =
+                          widget.controller.currentShipsCount[removedShip.size]! + 1;
                     }
-                  }
-                });
+                  });
+                }
               } else {
                 final result = widget.controller.addShip(
                   target,
@@ -77,16 +74,16 @@ class _ShipPlacingState extends State<ShipPlacingView> {
                     ? target.copyWith(length: target.length + _selectedShip! - 1)
                     : target.copyWith(width: target.width + _selectedShip! - 1)
                 );
-                setState(() {
-                  if (result is Error) {
-                    _error = result.error;
+                if (result is Error) {
+                  _selectedShip = null;
+                  widget.onError(result.error);
+                } else {
+                  setState(() {
+                    widget.controller.currentShipsCount[_selectedShip!] =
+                        widget.controller.currentShipsCount[_selectedShip!]! - 1;
                     _selectedShip = null;
-                  } else {
-                    widget.shipsCount[_selectedShip!] =
-                        widget.shipsCount[_selectedShip!]! - 1;
-                    _selectedShip = null;
-                  }
-                });
+                  });
+                }
               }
             },
             zone: widget.controller.currentPlayerBattleField.zone,
@@ -101,20 +98,21 @@ class _ShipPlacingState extends State<ShipPlacingView> {
               ),
             ),
           ),
-          Spacer(),
+          const Spacer(),
           Column(
             children: List<Widget>.generate(
-              widget.shipsCount.length,
+              widget.controller.currentShipsCount.length,
               (i) => Row(
                 children: [
                   ElevatedButton(
-                    onPressed: widget.shipsCount[i+1]! == 0
+                    // disable button if no ships left
+                    onPressed: widget.controller.currentShipsCount[i+1]! == 0
                       ? null
                       : () => setState(() { _selectedShip = i + 1; }),
                     child: Text(
                       _shipsOrientation[i+1]! == ShipOrientation.vertical
-                        ? "${i+1}V: ${widget.shipsCount[i+1]!} left"
-                        : "${i+1}H: ${widget.shipsCount[i+1]!} left"
+                        ? "${i+1} Vertical: ${widget.controller.currentShipsCount[i+1]!} left"
+                        : "${i+1} Horizontal: ${widget.controller.currentShipsCount[i+1]!} left"
                     )
                   ),
                   ElevatedButton(
@@ -127,11 +125,13 @@ class _ShipPlacingState extends State<ShipPlacingView> {
                 ],
               )
             ) + [
-              Text(_error, style: const TextStyle(color: Colors.red)),
               ElevatedButton(
-                onPressed: widget.shipsCount.values.any((x) => x != 0)
+                // disable if any ships left to place
+                onPressed: widget.controller
+                                 .currentShipsCount
+                                 .values.any((x) => x != 0)
                   ? null
-                  : () => widget.onSwitch(widget.controller.switchPlayer()),
+                  : () => widget.onPlayerSwitch(widget.controller.switchPlayer()),
                 child: const Text("Ships ready")
               ),
             ],

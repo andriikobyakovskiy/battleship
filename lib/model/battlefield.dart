@@ -44,8 +44,8 @@ class BattleField {
   }
 
   Ship addShip(Ship newShip) {
-    for (var i = 0; i < ships.length; i++) {
-      if (ships[i].intersects(newShip)) {
+    for (var s in ships) {
+      if (s.intersects(newShip)) {
         throw ArgumentError("Ships should not intersect");
       }
     }

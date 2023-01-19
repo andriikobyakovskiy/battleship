@@ -19,12 +19,14 @@ class Error extends PlacingResult {
 }
 
 class ShipPlacingController {
-  final Map<String, BattleField> battleFields;
+  final Map<String, BattleField> _battleFields;
+  final Map<String, Map<int, int>> _playersShipsCounts;
   String _currentPlayer;
 
   ShipPlacingController(
-    this.battleFields,
-  ): _currentPlayer = battleFields.keys.first;
+    this._battleFields,
+    this._playersShipsCounts,
+  ): _currentPlayer = _battleFields.keys.first;
 
   PlacingResult addShip(Coordinates start, Coordinates end) {
     try {
@@ -49,10 +51,11 @@ class ShipPlacingController {
   }
 
   String switchPlayer() {
-    _currentPlayer = otherPlayer(_currentPlayer, battleFields);
+    _currentPlayer = otherPlayer(_currentPlayer, _battleFields);
     return _currentPlayer;
   }
 
-  BattleField get currentPlayerBattleField => battleFields[_currentPlayer]!;
+  BattleField get currentPlayerBattleField => _battleFields[_currentPlayer]!;
   String get currentPlayer => _currentPlayer;
+  Map<int, int> get currentShipsCount => _playersShipsCounts[_currentPlayer]!;
 }

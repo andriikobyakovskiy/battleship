@@ -2,21 +2,21 @@ import 'package:battleship/view/awaiting_player_screen.dart';
 import 'package:flutter/material.dart';
 
 typedef WidgetBuilder = Widget Function(
-  Function(String) resume,
+  Function(String) onActivityEnd,
   Function(String) onError,
-  Function(String) onSwitch
+  Function(String) onPlayerSwitch
 );
 
 class TwoPlayersActivity extends StatefulWidget {
   final WidgetBuilder widgetBuilder;
-  final Function(String) resume;
+  final Function(String) onActivityEnd;
   final String header;
   final String firstPlayer;
 
   const TwoPlayersActivity({
     super.key,
     required this.widgetBuilder,
-    required this.resume,
+    required this.onActivityEnd,
     required this.header,
     required this.firstPlayer,
   });
@@ -40,9 +40,7 @@ class _TwoPlayersActivityState extends State<TwoPlayersActivity> {
   Widget build(BuildContext context) {
     if (!_currentPlayerReady) {
       return AwaitingPlayerScreen(
-        onReady: () => setState(() {
-          _currentPlayerReady = true;
-        }),
+        onReady: () => setState(() { _currentPlayerReady = true; }),
         player: _currentPlayer,
       );
     }
@@ -51,11 +49,14 @@ class _TwoPlayersActivityState extends State<TwoPlayersActivity> {
         Text(widget.header, style: const TextStyle(fontSize: 24)),
         Text(_error, style: const TextStyle(fontSize: 12, color: Colors.red)),
         widget.widgetBuilder(
+          // onActivityEnd
           (x) {
             _currentPlayerReady = false;
-            widget.resume(x);
+            widget.onActivityEnd(x);
           },
+          // onError
           (error) => setState(() { _error = error; }),
+          // onPlayerSwitch
           (nextPlayer) => setState(() {
             _currentPlayer = nextPlayer;
             _currentPlayerReady = false;
