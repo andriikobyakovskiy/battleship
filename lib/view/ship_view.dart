@@ -22,7 +22,7 @@ class ShipView extends StatelessWidget {
       child: Container(
         constraints: BoxConstraints(
           maxHeight: cellSide * ship.hitZone.length,
-          maxWidth: cellSide - ship.hitZone.width,
+          maxWidth: cellSide * ship.hitZone.width,
         ),
         color: Colors.black,
       ),

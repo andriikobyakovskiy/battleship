@@ -1,4 +1,5 @@
 import 'package:battleship/controller/battle_log.dart';
+import 'package:battleship/controller/utils.dart';
 import 'package:battleship/model/battlefield.dart';
 import 'package:battleship/model/coordinates.dart';
 
@@ -33,16 +34,6 @@ class BattleController {
     this.log,
     this.battleFields,
   ): _currentPlayer = battleFields.keys.first;
-
-  static String otherPlayer(
-    String currentPlayer,
-    Map<String, BattleField> battleFields
-  ) => battleFields.keys.firstWhere((key) => key != currentPlayer);
-
-  static BattleField otherBattleField(
-    String currentPlayer,
-    Map<String, BattleField> battleFields
-  ) => battleFields.entries.firstWhere((e) => e.key != currentPlayer).value;
 
   factory BattleController.initiate(Map<String, BattleField> battleFields) {
     final log = BattleLog(battleFields.map(

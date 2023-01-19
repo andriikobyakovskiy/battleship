@@ -1,24 +1,24 @@
 class Coordinates {
-  final int x;
-  final int y;
+  final int length;
+  final int width;
 
-  const Coordinates(this.x, this.y);
+  const Coordinates(this.length, this.width);
   factory Coordinates.letterDigit(String x, int y) =>
     Coordinates(x.runes.first, y);
 
-  Coordinates copyWith({int? x, int? y}) => Coordinates(
-    x ?? this.x,
-    y ?? this.y,
+  Coordinates copyWith({int? length, int? width}) => Coordinates(
+    length ?? this.length,
+    width ?? this.width,
   );
 
   @override
-  int get hashCode => (x << 16) + (y & 0xffff);
+  int get hashCode => (length << 16) + (width & 0xffff);
 
   @override
   bool operator ==(Object other) => identical(this, other) || (
-    other is Coordinates && (other.x == this.x && other.y == this.y)
+    other is Coordinates && (other.length == this.length && other.width == this.width)
   );
 
   @override
-  String toString() => "Coordinates($x,$y)";
+  String toString() => "Coordinates($length,$width)";
 }

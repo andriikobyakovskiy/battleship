@@ -22,15 +22,6 @@ class BattleLog {
 
   String? get winner {
     for (var playerEntry in shipsToHit.entries) {
-      print(playerEntry.value.entries.map(
-              (shipEntry) => shipEntry.value.toString()));
-      print(playerEntry.value.entries.map(
-              (shipEntry) => shipEntry.key.hitZone.coordinates.toString()));
-      print(playerEntry.value.entries.where(
-        (shipEntry) => shipEntry.key.hitZone.coordinates.toSet().difference(
-            shipEntry.value.toSet()
-        ).isNotEmpty
-      ).toList());
       final shipsRemain = playerEntry.value.entries.any(
         (shipEntry) => shipEntry.key.hitZone.coordinates.toSet().difference(
           shipEntry.value.toSet()

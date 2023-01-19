@@ -11,15 +11,15 @@ void main() {
     });
     test('Copy with', (){
       expect(
-        const Coordinates(0, 0).copyWith(y: 1),
+        const Coordinates(0, 0).copyWith(width: 1),
         const Coordinates(0, 1)
       );
       expect(
-        const Coordinates(0, 0).copyWith(x: 1),
+        const Coordinates(0, 0).copyWith(length: 1),
         const Coordinates(1, 0)
       );
       expect(
-        const Coordinates(0, 0).copyWith(x: 1, y: 1),
+        const Coordinates(0, 0).copyWith(length: 1, width: 1),
         const Coordinates(1, 1)
       );
     });

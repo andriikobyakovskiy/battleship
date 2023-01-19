@@ -9,10 +9,10 @@ class Zone {
   const Zone(this.length, this.width, [this.lengthOffset=0, this.widthOffset=0]);
 
   bool contains(Coordinates coordinates) {
-    if (coordinates.x < lengthOffset || coordinates.x >= lengthOffset + length) {
+    if (coordinates.length < lengthOffset || coordinates.length >= lengthOffset + length) {
       return false;
     }
-    if (coordinates.y < widthOffset || coordinates.y >= widthOffset + width) {
+    if (coordinates.width < widthOffset || coordinates.width >= widthOffset + width) {
       return false;
     }
 

@@ -9,15 +9,15 @@ class Ship {
   const Ship._(this.hitZone);
 
   factory Ship.build(Coordinates start, Coordinates end) {
-    if(start.x != end.x && start.y != end.y) {
+    if(start.length != end.length && start.width != end.width) {
       throw ArgumentError("Ship should be placed horizontally or vertically");
     }
 
     return Ship._(Zone(
-      (start.x - end.x).abs() + 1,
-      (start.y - end.y).abs() + 1,
-      min(start.x, end.x),
-      min(start.y, end.y),
+      (start.length - end.length).abs() + 1,
+      (start.width - end.width).abs() + 1,
+      min(start.length, end.length),
+      min(start.width, end.width),
     ));
   }
 

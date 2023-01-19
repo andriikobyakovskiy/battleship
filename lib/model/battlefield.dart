@@ -43,19 +43,22 @@ class BattleField {
     return BattleField._(zone, ships, hitMap);
   }
 
-  BattleField addShip(Ship newShip) {
+  Ship addShip(Ship newShip) {
     for (var i = 0; i < ships.length; i++) {
       if (ships[i].intersects(newShip)) {
         throw ArgumentError("Ships should not intersect");
       }
     }
     ships.add(newShip);
-    return this;
+    return newShip;
   }
 
-  BattleField removeShip(Ship ship) {
-    ships.remove(ship);
-    return this;
+  Ship? removeShip(Coordinates target) {
+    final ship = checkHit(target);
+    if (ship != null) {
+      ships.remove(ship);
+    }
+    return ship;
   }
 
   Ship? checkHit(Coordinates c) =>
@@ -65,12 +68,12 @@ class BattleField {
     if (!zone.contains(c)) {
       throw ArgumentError("Cannot target outside the battlefield");
     }
-    if (_hitMap[c.x - zone.lengthOffset][c.y - zone.widthOffset] != null) {
+    if (_hitMap[c.length - zone.lengthOffset][c.width - zone.widthOffset] != null) {
       throw ArgumentError("Cannot target same coordinates twice");
     }
 
     final target = checkHit(c);
-    _hitMap[c.x - zone.lengthOffset][c.y - zone.widthOffset] = target != null;
+    _hitMap[c.length - zone.lengthOffset][c.width - zone.widthOffset] = target != null;
     return target;
   }
 

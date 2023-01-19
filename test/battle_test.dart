@@ -2,8 +2,6 @@ import 'package:battleship/model/coordinates.dart';
 import 'package:battleship/model/ship.dart';
 import 'package:battleship/model/zone.dart';
 import 'package:battleship/model/battlefield.dart';
-import 'package:battleship/controller/battle_log.dart';
-import 'package:battleship/controller/battle_controller.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -172,7 +170,7 @@ void main() {
         Coordinates.letterDigit('A', 1),
         Coordinates.letterDigit('A', 1),
       );
-      b.removeShip(s);
+      b.removeShip(s.hitZone.coordinates.first);
       expect(b.ships.contains(s), false);
     });
     test('Target ship', (){
