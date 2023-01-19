@@ -34,10 +34,20 @@ class BattleController {
     this.battleFields,
   ): _currentPlayer = battleFields.keys.first;
 
+  static String otherPlayer(
+    String currentPlayer,
+    Map<String, BattleField> battleFields
+  ) => battleFields.keys.firstWhere((key) => key != currentPlayer);
+
+  static BattleField otherBattleField(
+    String currentPlayer,
+    Map<String, BattleField> battleFields
+  ) => battleFields.entries.firstWhere((e) => e.key != currentPlayer).value;
+
   factory BattleController.initiate(Map<String, BattleField> battleFields) {
     final log = BattleLog(battleFields.map(
       (player, bf) => MapEntry(
-        player,
+        otherPlayer(player, battleFields),
         Map.fromIterable(bf.ships, value: (_) => <Coordinates>{})
       )
     ));
@@ -54,9 +64,7 @@ class BattleController {
       }
 
       if (result == null) {
-        _currentPlayer = battleFields
-            .keys
-            .firstWhere((p) => p != _currentPlayer);
+        _currentPlayer = otherPlayer(_currentPlayer, battleFields);
         return Miss(_currentPlayer);
       }
       else {
@@ -69,6 +77,10 @@ class BattleController {
   }
 
   BattleField get currentPlayerBattleField => battleFields[_currentPlayer]!;
-  BattleField get otherPlayerBattleField =>
-      battleFields.entries.firstWhere((e) => e.key != _currentPlayer).value;
+  BattleField get otherPlayerBattleField => otherBattleField(
+    _currentPlayer,
+    battleFields
+  );
+
+  String get currentPlayer => _currentPlayer;
 }

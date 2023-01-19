@@ -4,6 +4,7 @@ import 'package:battleship/model/coordinates.dart';
 import 'package:battleship/model/ship.dart';
 import 'package:battleship/model/zone.dart';
 import 'package:battleship/view/battle_view.dart';
+import 'package:battleship/view/two_players_activity.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -60,11 +61,23 @@ class _MenuPageState extends State<MenuPage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: BattleView(
-        battleController: controller,
-        onError: (_) {},
-        onSwitch: (_) {},
-        onWinner: (_) {},
+      body: TwoPlayersActivity(
+        resume: (winner) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text("$winner is a winner!"),
+          ));
+        },
+        header: "Demo Battleship",
+        firstPlayer: controller.currentPlayer,
+        battleWidgetBuilder: (resume, onError, onSwitch) => BattleView(
+          battleController: controller,
+          onError: onError,
+          onSwitch: onSwitch,
+          onVictory: (w) {
+            onError('');
+            resume(w);
+          },
+        ),
       ),
     );
   }

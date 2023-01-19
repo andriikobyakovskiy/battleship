@@ -13,18 +13,28 @@ class Turn {
 
 class BattleLog {
   final ListQueue<Turn> log;
-  final Map<String, Map<Ship, Set<Coordinates>>> shipHits;
+  final Map<String, Map<Ship, Set<Coordinates>>> shipsToHit;
 
   BattleLog(
-    this.shipHits,
+    this.shipsToHit,
     [ListQueue<Turn>? existingLog]
   ): log = existingLog ?? ListQueue();
 
   String? get winner {
-    for (var playerEntry in shipHits.entries) {
+    for (var playerEntry in shipsToHit.entries) {
+      print(playerEntry.value.entries.map(
+              (shipEntry) => shipEntry.value.toString()));
+      print(playerEntry.value.entries.map(
+              (shipEntry) => shipEntry.key.hitZone.coordinates.toString()));
+      print(playerEntry.value.entries.where(
+        (shipEntry) => shipEntry.key.hitZone.coordinates.toSet().difference(
+            shipEntry.value.toSet()
+        ).isNotEmpty
+      ).toList());
       final shipsRemain = playerEntry.value.entries.any(
-        (shipEntry) => shipEntry.value.toSet() !=
-            shipEntry.key.hitZone.coordinates.toSet()
+        (shipEntry) => shipEntry.key.hitZone.coordinates.toSet().difference(
+          shipEntry.value.toSet()
+        ).isNotEmpty
       );
       if (!shipsRemain) {
         return playerEntry.key;
@@ -35,7 +45,7 @@ class BattleLog {
 
   BattleLog logTurn(String player, Coordinates target, Ship? result) {
     if (result != null) {
-      shipHits[player]?[result]?.add(target);
+      shipsToHit[player]?[result]?.add(target);
     }
 
     log.add(Turn(player, target, result));

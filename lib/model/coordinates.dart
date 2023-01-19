@@ -18,4 +18,7 @@ class Coordinates {
   bool operator ==(Object other) => identical(this, other) || (
     other is Coordinates && (other.x == this.x && other.y == this.y)
   );
+
+  @override
+  String toString() => "Coordinates($x,$y)";
 }

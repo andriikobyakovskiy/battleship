@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 class BattleView extends StatelessWidget {
   final BattleController battleController;
   final void Function(String) onError;
-  final void Function(String) onWinner;
+  final void Function(String) onVictory;
   final void Function(String) onSwitch;
 
   static const gridSide = 200.0;
@@ -17,7 +17,7 @@ class BattleView extends StatelessWidget {
     required this.battleController,
     required this.onError,
     required this.onSwitch,
-    required this.onWinner,
+    required this.onVictory,
   });
 
   @override
@@ -48,7 +48,7 @@ class BattleView extends StatelessWidget {
               onTarget: (target) {
                 final result = battleController.makeTurn(target);
                 if (result is Victory) {
-                  onWinner(result.player);
+                  onVictory(result.player);
                 } else if (result is Error) {
                   onError(result.error);
                 } else if (result is Hit) {

@@ -23,9 +23,9 @@ class TargetListener extends StatelessWidget {
         final relativePosition = event.localPosition / side;
         final target = Coordinates(
           zone.lengthOffset
-            + (zone.length * relativePosition.dy).floor(),
+            + (zone.length * relativePosition.dy - 1).floor(),
           zone.widthOffset
-            + (zone.width * relativePosition.dx).floor(),
+            + (zone.width * relativePosition.dx - 1).floor(),
         );
         onTarget(target);
       },
