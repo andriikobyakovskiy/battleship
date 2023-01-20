@@ -219,6 +219,20 @@ void main() {
           e.message == "Cannot target outside the battlefield"))
       );
     });
+    test('Placing ship outside of battlefield', (){
+      final b1 = BattleField.build(
+        const Zone(3, 3),
+      );
+      expect(
+        () => b1.addShip(Ship.build(
+            const Coordinates(4, 1),
+            const Coordinates(4, 2)
+        )),
+        throwsA(predicate((e) =>
+          e is ArgumentError &&
+          e.message == "Ship should be placed inside battlefield"))
+      );
+    });
   });
   /*============================================================*/
 }

@@ -2,13 +2,13 @@ import 'package:battleship/model/coordinates.dart';
 import 'package:battleship/model/zone.dart';
 import 'package:flutter/material.dart';
 
-class TargetListener extends StatelessWidget {
+class ZoneListener extends StatelessWidget {
   final Zone zone;
   final double side;
   final Widget child;
   final void Function(Coordinates) onTarget;
 
-  const TargetListener({
+  const ZoneListener({
     super.key,
     required this.zone,
     required this.child,

@@ -45,7 +45,7 @@ class BattleController {
     return BattleController._(log, battleFields);
   }
 
-  TurnResult makeTurn(Coordinates target) {
+  TurnResult makeMove(Coordinates target) {
     try {
       final result = otherPlayerBattleField.makeMove(target);
       _log.logTurn(_currentPlayer, target, result);

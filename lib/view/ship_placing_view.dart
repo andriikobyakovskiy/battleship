@@ -1,7 +1,7 @@
 import 'package:battleship/controller/ship_placing_controller.dart';
 import 'package:battleship/view/battlefield_grid_wrapper.dart';
 import 'package:battleship/view/battlefield_view.dart';
-import 'package:battleship/view/target_listener.dart';
+import 'package:battleship/view/zone_listener.dart';
 import 'package:flutter/material.dart';
 
 enum ShipOrientation {
@@ -52,7 +52,7 @@ class _ShipPlacingState extends State<ShipPlacingView> {
       height: widget.gridSide * 1.1,
       child: Row(
         children: [
-          TargetListener(
+          ZoneListener(
             onTarget: (target) {
               if (_selectedShip == null) {
                 final result = widget.controller.removeShip(target);

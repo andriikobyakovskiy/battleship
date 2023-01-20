@@ -143,6 +143,7 @@ class _GameState extends State<GameView> {
       ] + List.generate(
         5,
         (i) => Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text("Size ${i + 1}:"),
             ElevatedButton(
@@ -176,7 +177,11 @@ class _GameState extends State<GameView> {
   }
 
   void _checkPlayersNames() {
-    if (_player1Name.isNotEmpty && _player2Name.isNotEmpty) {
+    if (_player1Name == _player2Name) {
+      setState(() {
+        _editingNameError = 'Names should be different';
+      });
+    } else if (_player1Name.isNotEmpty && _player2Name.isNotEmpty) {
       setState(() {
         _editingNameError = '';
       });
@@ -206,6 +211,10 @@ class _GameState extends State<GameView> {
                 _checkPlayersNames();
               })),
             ]
+          ),
+          Text(
+            _editingNameError,
+            style: const TextStyle(fontSize: 16, color: Colors.red),
           ),
           ElevatedButton(
             onPressed: _editingNameError != ''

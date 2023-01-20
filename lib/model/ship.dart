@@ -42,8 +42,8 @@ class Ship {
   bool intersects(Ship other) =>
     hitZone.coordinates.toSet().intersection(
       // switch between surroundingZone and hitZone here to
-      // allow/reject placing ships one close to another
-      other.surroundingZone.coordinates.toSet()
+      // allow/prevent placing ships one close to another
+      other.hitZone.coordinates.toSet()
     ).isNotEmpty;
 
   @override

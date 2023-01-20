@@ -6,9 +6,9 @@ import 'package:collection/collection.dart';
 class BattleField {
   final Zone zone;
   final List<List<bool?>> _hitMap;
-  final List<Ship> ships;
+  final List<Ship> _ships;
 
-  const BattleField._(this.zone, this.ships, this._hitMap);
+  const BattleField._(this.zone, this._ships, this._hitMap);
 
   factory BattleField.build(
     Zone zone,
@@ -44,25 +44,28 @@ class BattleField {
   }
 
   Ship addShip(Ship newShip) {
-    for (var s in ships) {
+    for (var s in _ships) {
       if (s.intersects(newShip)) {
         throw ArgumentError("Ships should not intersect");
       }
     }
-    ships.add(newShip);
+    if (newShip.hitZone.coordinates.any((c) => !zone.contains(c))) {
+      throw ArgumentError("Ship should be placed inside battlefield");
+    }
+    _ships.add(newShip);
     return newShip;
   }
 
   Ship? removeShip(Coordinates target) {
     final ship = checkHit(target);
     if (ship != null) {
-      ships.remove(ship);
+      _ships.remove(ship);
     }
     return ship;
   }
 
   Ship? checkHit(Coordinates c) =>
-      ships.firstWhereOrNull((ship) => ship.hitZone.contains(c));
+      _ships.firstWhereOrNull((ship) => ship.hitZone.contains(c));
 
   Ship? makeMove(Coordinates c) {
     if (!zone.contains(c)) {
@@ -82,4 +85,6 @@ class BattleField {
       _hitMap.length,
       (x) => List.from(_hitMap[x])
     );
+
+  List<Ship> get ships => List.from(_ships);
 }

@@ -1,7 +1,7 @@
 import 'package:battleship/controller/battle_controller.dart';
 import 'package:battleship/view/battlefield_grid_wrapper.dart';
 import 'package:battleship/view/battlefield_view.dart';
-import 'package:battleship/view/target_listener.dart';
+import 'package:battleship/view/zone_listener.dart';
 import 'package:flutter/material.dart';
 
 class BattleView extends StatelessWidget {
@@ -44,9 +44,9 @@ class BattleView extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.centerRight,
-            child: TargetListener(
+            child: ZoneListener(
               onTarget: (target) {
-                final result = battleController.makeTurn(target);
+                final result = battleController.makeMove(target);
                 if (result is Victory) {
                   onVictory(result.player);
                 } else if (result is Error) {

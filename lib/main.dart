@@ -14,29 +14,12 @@ class BattleshipApp extends StatelessWidget {
     return MaterialApp(
       title: 'Battleship',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const MenuPage(title: 'Menu'),
-    );
-  }
-}
-
-class MenuPage extends StatefulWidget {
-  const MenuPage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MenuPage> createState() => _MenuPageState();
-}
-
-class _MenuPageState extends State<MenuPage> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Battleship'),
+        ),
+        body: GameView(),
       ),
-      body: GameView(),
     );
   }
 }

@@ -7,6 +7,8 @@ typedef WidgetBuilder = Widget Function(
   Function(String) onPlayerSwitch
 );
 
+// View that provides visual placeholder before showing
+// player's 'sensitive information' - ships placement in our case
 class TwoPlayersActivity extends StatefulWidget {
   final WidgetBuilder widgetBuilder;
   final Function(String) onActivityEnd;
@@ -52,6 +54,7 @@ class _TwoPlayersActivityState extends State<TwoPlayersActivity> {
           // onActivityEnd
           (x) {
             _currentPlayerReady = false;
+            _error = '';
             widget.onActivityEnd(x);
           },
           // onError
@@ -60,6 +63,7 @@ class _TwoPlayersActivityState extends State<TwoPlayersActivity> {
           (nextPlayer) => setState(() {
             _currentPlayer = nextPlayer;
             _currentPlayerReady = false;
+            _error = '';
           }),
         )
       ]
